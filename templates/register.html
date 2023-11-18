@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Registration</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bulma CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+    />
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <!-- Font Awesome -->
+    <link
+      href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+
+    <script>
+      function login() {
+        window.location.href = "/login";
+      }
+
+      function register() {
+        let id_input = $("#userid").val()
+        let pw_input = $("#userpw").val()
+        let nickname_input = $("#usernick").val()
+
+        if (!id_input) {
+            return alert('Mohon masukkan ID');
+        }
+        if (!pw_input) {
+            return alert('Mohon masukkan Password');
+        }
+        if (!nickname_input) {
+            return alert('Mohon masukkan Nickname');
+        }
+
+        $.ajax({
+          type: "POST",
+          url: "/api/register",
+          data: {
+            'id_give': id_input,
+            'pw_give': pw_input,
+            'nickname_give': nickname_input,
+          },
+          success: function (response) {
+            if (response["used"] === true) {
+              alert(response["msg"]);
+              $("#userid").val("");
+              $("#userpw").val("");
+              $("#usernick").val("");
+              return;
+            } else {
+              alert(response["msg"]);
+              window.location.href = "/login";
+            }
+          },
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <div class="section has-text-centered">
+      <h1 class="title">User Registration Page</h1>
+      <div class="container" style="width: 60%">
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label" for="userid">ID</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input
+                  type="text"
+                  class="input"
+                  id="userid"
+                  aria-describedby="emailHelp"
+                  placeholder="My ID"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label" for="userpw">Password</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input
+                  type="password"
+                  class="input"
+                  id="userpw"
+                  placeholder="My Password"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label" for="usernick">Nickname</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input
+                  type="text"
+                  class="input"
+                  id="usernick"
+                  placeholder="My Nickname"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="button is-primary" onclick="login()">Login</button>
+        <button class="button is-primary" onclick="register()">
+          User Registration
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
